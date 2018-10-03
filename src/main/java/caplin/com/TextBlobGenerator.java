@@ -102,19 +102,19 @@ public class TextBlobGenerator {
     }
 
     private void generateLettersWithLoopBack() {
-        generateLetterBlocks();
+        int numberOfLetterBlocks = addLettersFor / LETTER_BLOCK_SIZE;
+        generateLetterBlocks(numberOfLetterBlocks);
 
-        int numberOfLoopBackLetters = addLettersFor % LETTER_BLOCK_SIZE;
-        if (numberOfLoopBackLetters > 0) {
-            generatePartialLetterBlock(0, numberOfLoopBackLetters - 1);
+        int numberOfRemainingLetters = addLettersFor % LETTER_BLOCK_SIZE;
+        if (numberOfRemainingLetters > 0) {
+            generatePartialLetterBlock(0, numberOfRemainingLetters - 1);
         }
     }
 
-    private void generateLetterBlocks() {
-        int numberOfLetterBlocks = addLettersFor / LETTER_BLOCK_SIZE;
-        while (numberOfLetterBlocks > 0) {
+    private void generateLetterBlocks(int number) {
+        while (number > 0) {
             repeatLetterBlock(0, LETTER_BLOCK_SIZE - 1);
-            numberOfLetterBlocks--;
+            number--;
         }
     }
 
@@ -162,7 +162,7 @@ public class TextBlobGenerator {
     public static void main(String[] args) {
         DataWrapper dataWrapper = new DataWrapper();
         dataWrapper.instruction = "addLettersFor:9-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left";
-        dataWrapper.instruction = "addLettersFor:8-loops,padLeftFor:5-loops,padRightFor:7-loops,paddingStyle:right";
+//        dataWrapper.instruction = "addLettersFor:8-loops,padLeftFor:5-loops,padRightFor:7-loops,paddingStyle:right";
 //        dataWrapper.instruction = "addLettersFor:12-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left";
 //        dataWrapper.instruction = "addLettersFor:13-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left";
 //        dataWrapper.instruction = "addLettersFor:0-loops,padLeftFor:99-loops,padRightFor:0-loops,paddingStyle:right";
