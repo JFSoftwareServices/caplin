@@ -1,5 +1,8 @@
 package caplin.com;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Text blob generator takes an instruction string
  * <p>
@@ -50,15 +53,14 @@ public class TextBlobGenerator {
     }
 
     private void parseInstruction(String instructions) {
-        String[] instructionTokens = instructions.split(":");
-        addLettersFor = Integer.parseInt(instructionTokens[1].split("-")[0]);
-        padLeftFor = Integer.parseInt(instructionTokens[2].split("-")[0]);
-        padRightFor = Integer.parseInt(instructionTokens[3].split("-")[0]);
-        paddingStyle = (isPaddingStyleSpecified(instructionTokens)) ? instructionTokens[4] : "";
-    }
-
-    private boolean isPaddingStyleSpecified(String[] InstructionTokens) {
-        return InstructionTokens.length == 5;
+        Pattern pattern = Pattern.compile(".*:(\\d+)-.*:(\\d+)-.*:(\\d+)-loops(?:,paddingStyle:(left|right))?");
+        Matcher m = pattern.matcher(instructions);
+        if (m.find()) {
+            addLettersFor = Integer.parseInt(m.group(1));
+            padLeftFor = Integer.parseInt(m.group(2));
+            padRightFor = Integer.parseInt(m.group(3));
+            paddingStyle = (m.group(4) == null) ? "" : m.group(4);
+        }
     }
 
     private void padBlob() {
