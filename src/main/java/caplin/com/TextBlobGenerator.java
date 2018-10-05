@@ -53,7 +53,7 @@ public class TextBlobGenerator {
     }
 
     private void parseInstruction(String instructions) {
-        Pattern pattern = Pattern.compile(".*:(\\d+)-.*:(\\d+)-.*:(\\d+)-loops(?:,paddingStyle:(left|right))?");
+        Pattern pattern = Pattern.compile(".*:(\\d+)-.*:(\\d+)-.*:(\\d+)-\\w+(?:,paddingStyle:(left|right))?");
         Matcher m = pattern.matcher(instructions);
         if (m.find()) {
             addLettersFor = Integer.parseInt(m.group(1));
@@ -91,47 +91,37 @@ public class TextBlobGenerator {
 
     private void generateLettersForBlob() {
         if (addLettersFor <= LETTER_BLOCK_SIZE) {
-            generateLettersWithNoLoopBack();
+            generateBlobLettersWithNoLoopBack();
         } else {
-            generateLettersWithLoopBack();
+            generateBlobLettersWithLoopBack();
         }
     }
 
-    private void generateLettersWithNoLoopBack() {
-        for (int i = addLettersFor - 1; i >= 0; i--) {
-            blob = LETTER_BLOCK[i] + blob;
+    private void generateBlobLettersWithNoLoopBack() {
+        for (int i = 0; i < addLettersFor; i++) {
+            blob = blob + LETTER_BLOCK[i];
         }
     }
 
-    private void generateLettersWithLoopBack() {
+    private void generateBlobLettersWithLoopBack() {
         int numberOfLetterBlocks = addLettersFor / LETTER_BLOCK_SIZE;
-        generateLetterBlocks(numberOfLetterBlocks);
+        String joinedLetterBlock = generateJoinedLetterBlock();
+        for (int i = 0; i < numberOfLetterBlocks; i++) {
+            blob = blob + joinedLetterBlock;
+        }
 
         int numberOfRemainingLetters = addLettersFor % LETTER_BLOCK_SIZE;
-        if (numberOfRemainingLetters > 0) {
-            generatePartialLetterBlock(0, numberOfRemainingLetters - 1);
+        for (int i = 0; i < numberOfRemainingLetters; i++) {
+            blob = blob + LETTER_BLOCK[i];
         }
     }
 
-    private void generateLetterBlocks(int number) {
-        while (number > 0) {
-            repeatLetterBlock(0, LETTER_BLOCK_SIZE - 1);
-            number--;
+    private String generateJoinedLetterBlock() {
+        String block = "";
+        for (int i = 0; i < LETTER_BLOCK_SIZE; i++) {
+            block = block + LETTER_BLOCK[i];
         }
-    }
-
-    private void repeatLetterBlock(int beginIndex, int endIndex) {
-        while (endIndex >= beginIndex) {
-            blob = LETTER_BLOCK[endIndex] + blob;
-            endIndex--;
-        }
-    }
-
-    private void generatePartialLetterBlock(int beginIndex, int endIndex) {
-        while (beginIndex <= endIndex) {
-            blob = blob + LETTER_BLOCK[beginIndex];
-            beginIndex++;
-        }
+        return block;
     }
 
     private String getBlob() {
