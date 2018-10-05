@@ -63,32 +63,6 @@ public class TextBlobGenerator {
         }
     }
 
-    private void padBlob() {
-        if ("left".equals(paddingStyle)) {
-            padBlobLeft();
-        } else if ("right".equals(paddingStyle)) {
-            padBlobRight();
-        } else {
-            padBlobNone();
-        }
-    }
-
-    private void padBlobNone() {
-        blob = blob + "";
-    }
-
-    private void padBlobRight() {
-        for (int i = 0; i < padRightFor; i++) {
-            blob = blob + "-";
-        }
-    }
-
-    private void padBlobLeft() {
-        for (int i = 0; i < padLeftFor; i++) {
-            blob = "-" + blob;
-        }
-    }
-
     private void generateLettersForBlob() {
         if (addLettersFor <= LETTER_BLOCK_SIZE) {
             generateBlobLettersWithNoLoopBack();
@@ -124,6 +98,32 @@ public class TextBlobGenerator {
         return block;
     }
 
+    private void padBlob() {
+        if ("left".equals(paddingStyle)) {
+            padBlobLeft();
+        } else if ("right".equals(paddingStyle)) {
+            padBlobRight();
+        } else {
+            padBlobNone();
+        }
+    }
+
+    private void padBlobNone() {
+        blob = blob + "";
+    }
+
+    private void padBlobRight() {
+        for (int i = 0; i < padRightFor; i++) {
+            blob = blob + "-";
+        }
+    }
+
+    private void padBlobLeft() {
+        for (int i = 0; i < padLeftFor; i++) {
+            blob = "-" + blob;
+        }
+    }
+
     private String getBlob() {
         return blob;
     }
@@ -133,6 +133,10 @@ public class TextBlobGenerator {
 
         String getInstruction() {
             return instruction;
+        }
+
+        void setInstruction(String instruction) {
+            this.instruction = instruction;
         }
 
         @Override
@@ -153,7 +157,7 @@ public class TextBlobGenerator {
 
     public static void main(String[] args) {
         DataWrapper dataWrapper = new DataWrapper();
-        dataWrapper.instruction = "addLettersFor:9-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left";
+        dataWrapper.setInstruction("addLettersFor:9-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left");
 //        dataWrapper.instruction = "addLettersFor:8-loops,padLeftFor:5-loops,padRightFor:7-loops,paddingStyle:right";
 //        dataWrapper.instruction = "addLettersFor:12-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left";
 //        dataWrapper.instruction = "addLettersFor:13-loops,padLeftFor:99-loops,padRightFor:999-loops,paddingStyle:left";
